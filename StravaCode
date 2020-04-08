@@ -1,0 +1,63 @@
+import requests
+import urllib3
+import pandas as pd
+import polyline
+
+# sets the display so that when the code prints, it is readable
+pd.set_option('display.max_rows', 3000)
+pd.set_option('display.max_columns', 55)
+pd.set_option('display.width', 3000)
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+auth_url = "https://www.strava.com/oauth/token"
+
+activities_url = "https://www.strava.com/api/v3/athlete/activities"
+
+payload = {
+    'client_id': "xxxxx",
+    'client_secret': 'xxxxxx',
+    'refresh_token': pulled from postman,
+    'grant_type': "refresh_token",
+    "scope": "activity:read_all",
+    'f': 'json'
+}
+
+print("Requesting Token...\n")
+res = requests.post(auth_url, data=payload, verify=False)
+access_token = res.json()['access_token']
+print("Access Token = {}\n".format(access_token))
+
+header = {'Authorization': 'Bearer ' + access_token}
+#param = {'per_page': 200}
+
+# Initialize the dataframe
+col_names = ['name','map']
+activities = pd.DataFrame(columns=col_names)
+
+page = 1
+while True:
+
+    # get page of activities from Strava
+    r = requests.get(activities_url + '?' + "access_token=" + access_token + '&per_page=50' + '&page=' + str(page))
+    r = r.json()
+
+    # if no results then exit loop
+    if not r:
+        break
+
+    # otherwise add new data to dataframe
+    for x in range(len(r)):
+        activities.loc[x + (page - 1) * 50, 'name'] = r[x]['name']
+        act = activities.loc[x + (page - 1) * 50, 'map'] = r[x]['map']['summary_polyline']
+
+    # increment page
+    page += 1
+
+df = pd.DataFrame(activities)
+
+if df['map'] is not None:
+    polyline.decode("'" + act + "'", geojson=True)
+    
+#df.to_csv('strava.csv')
+print(df)
