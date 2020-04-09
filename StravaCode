@@ -1,6 +1,7 @@
 import requests
 import urllib3
 import pandas as pd
+import json
 import polyline
 
 # sets the display so that when the code prints, it is readable
@@ -15,9 +16,9 @@ auth_url = "https://www.strava.com/oauth/token"
 activities_url = "https://www.strava.com/api/v3/athlete/activities"
 
 payload = {
-    'client_id': "xxxxx",
-    'client_secret': 'xxxxxx',
-    'refresh_token': pulled from postman,
+    'client_id': "45193",
+    'client_secret': 'a7788974811551b8f11989e248c16aaa07230621',
+    'refresh_token': 'fe42846ab2ea6b7957699a36b420e80f840e711e',
     'grant_type': "refresh_token",
     "scope": "activity:read_all",
     'f': 'json'
@@ -56,8 +57,20 @@ while True:
 
 df = pd.DataFrame(activities)
 
-if df['map'] is not None:
-    polyline.decode("'" + act + "'", geojson=True)
-    
-#df.to_csv('strava.csv')
+# if df['map'] is not None:
+#     polyline.decode((df['map']).replace('\\\\','\\'))
+
+for row in df.itertuples(index=True, name='Pandas'):
+
+    name = row[1]
+    map = row[2]
+
+    try:
+        decoded = polyline.decode(map.replace('\\\\','\\'))
+        df['map'] = df.apply(lambda x: [decoded], axis=1)
+
+    except:
+        print(name)
+
+df.to_csv('strava.csv')
 print(df)
