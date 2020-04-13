@@ -2,8 +2,9 @@ import requests
 import urllib3
 import pandas as pd
 import numpy as np
-import json
+import geojson
 import polyline
+import shapely
 
 # sets the display so that when the code prints, it is readable
 pd.set_option('display.max_rows', 3000)
@@ -29,9 +30,6 @@ print("Requesting Token...\n")
 res = requests.post(auth_url, data=payload, verify=False)
 access_token = res.json()['access_token']
 print("Access Token = {}\n".format(access_token))
-
-header = {'Authorization': 'Bearer ' + access_token}
-#param = {'per_page': 200}
 
 # Initialize the dataframe
 col_names = ['name','route']
@@ -65,7 +63,9 @@ def decoder(name, route):
         print(name)
         return np.nan
 
-df['decode'] = df.apply(lambda x: decoder(x[0], x[1]), axis=1)
 
+df['decode'] = df.apply(lambda x: decoder(x[0], x[1]), axis=1)
+df = df[df['decode'].notna()]
+print(df.dtypes)
 #df.to_csv('strava_geojson.csv')
 print(df)
