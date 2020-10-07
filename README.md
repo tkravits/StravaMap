@@ -1,6 +1,6 @@
 # StravaMap
 
-I wanted to create a map of all the activies I've done in Boulder County. I utilized the Strava API and was able to pull all of my activities and create a geojson from it.
+I wanted to create a map of all the activies I've ever done. I utilized the Strava API and was able to pull all of my activities and create a geojson from it.
 
 Here is the map: <b></br>
 
