@@ -5,4 +5,4 @@ I wanted to create a map of all the activies I've done in Boulder County. I util
 Here is the map:
 <script src="https://embed.github.com/view/geojson/tkravits/StravaMap/master/Strava_Map_Minus_Secret.geojson"></script>
 
-Here is the<h2> <a href="https://tkravits.github.io/StravaMap">Code</a></h2>
+Here is the <a href="https://tkravits.github.io/StravaMap">Code</a>
