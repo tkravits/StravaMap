@@ -6,5 +6,8 @@ Here is the map: <b></br>
 
 <script src="https://embed.github.com/view/geojson/tkravits/StravaMap/master/Strava_Map_Minus_Secret.geojson"></script>
 
-<b></br>
+
+
+
+
 Here is the <a href="https://tkravits.github.io/StravaMap">Code</a>
